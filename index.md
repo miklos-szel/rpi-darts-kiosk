@@ -1,5 +1,15 @@
 ## Welcome to GitHub Pages
 
+###  HW requirements:
+- Raspberry Pi model 3 or newer recommended
+- Microsoft Wireless Number Pad or a physical USB keyboard (latter works without out of the box) 
+- USB mouse to start the match, navigate stats (bluetooth mouse works as well)
+- Raspberry Pi Micro USB Cable with ON/Off Switch (optional, it can be any other Micro USB cable)
+- HDMI cable
+- A TV or monitor, the current setup doesn't support an external touchscreen as I don't have one
+
+
+
 You can use the [editor on GitHub](https://github.com/miklos-szel/rpi-darts-scorer/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.

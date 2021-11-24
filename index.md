@@ -19,6 +19,8 @@
   * Physical USB mouse
 * OPTIONAL: vnc (remote control software, can act as a mouse or keyboard)
 
+The final system boots withing a minute with all the optional settings enabled. 
+
 # Install Raspberry Pi OS (bullseye)
 
 Download and install the [Raspberry Imager.](https://github.com/raspberrypi/rpi-imager/releases/tag/v1.6.2)
@@ -177,7 +179,7 @@ sudo systemctl enable splashscreen.service
 ```
 
 
-### OPTIONAL: Make the system read only, 
+### OPTIONAL: Make the system read only
 I highly recommend to make all the changes you want before doing this. You might want to log in to homepage with your user first and optionally save the credentials in the chromium-browser so only a mouse will be needed later to start a match (slightly unsecure)
 Scoring can be completely done with the numberic keyboard.
 
@@ -195,14 +197,14 @@ sudo raspi-config
 
 Would you like the boot partition to be write-protected? **yes**
 
+If you want to make changes, log in, disable the overlay file system, reboot, make the changes and enable the overlay file system again.
 
-The boot time for the system with overlay/bluetooth enabled is 53 secs. 
 
 #### OPTIONAL: smart socket to remotely turn the system on/off :)
 This could be done in different ways but using an [ikea smart socket](https://www.ikea.com/gb/en/p/tradfri-wireless-control-outlet-00364477/) is super convenient for me. Only turn the Raspberry Pi off this way if the read only file system is enabled.
 
 
-The system boots withing a minute with all the optional settings enabled. 
+
 
 Useful urls: 
 

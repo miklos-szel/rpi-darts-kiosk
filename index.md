@@ -1,4 +1,4 @@
-# Remotely controlled darts scoring system using Raspberry Pi
+# Remotely Controlled Darts Scoring
 
 <p align="center">
   <img src="https://miklos-szel.github.io/rpi-darts-kiosk/imgs/final.png" />

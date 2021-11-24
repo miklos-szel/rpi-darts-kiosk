@@ -3,7 +3,7 @@
 A simple to setup remotely controlled darts scoring system using Raspberry Pi. 
 
 <p align="center">
-  <img src="/imgs/final.png" />
+  <img src="https://github.com/miklos-szel/rpi-darts-kiosk/blob/gh-pages/imgs/final.png" />
 </p>
 
 # Hardware requirements
@@ -31,7 +31,7 @@ Before writing the image use the Advanced options in the Raspberry Pi Imager to 
 Press [CTRL+SHIFT+X](https://youtu.be/om8gGB3gyT0?t=17) then make sure that 'enable ssh' and the 'Configure Wifi' sections are filled as seen below:
 
 <p align="center">
-  <img src="/imgs/rpi_imager_advanced_menu.png" height="800" />
+  <img src="https://github.com/miklos-szel/rpi-darts-kiosk/blob/gh-pages/imgs/rpi_imager_advanced_menu.png" height="800" />
 </p>
 
 # Setup the system
@@ -111,7 +111,7 @@ quit
 ```
 The Microsoft Wireless Number Pad works perfectly for scorekeeping. 
 <p align="center">
-  <img src="/imgs/keypad.png" />
+  <img src="https://github.com/miklos-szel/rpi-darts-kiosk/blob/gh-pages/imgs/keypad.png" />
 </p>
 
 
@@ -125,7 +125,7 @@ sudo systemctl start vncserver-x11-serviced.service
 
 Install VNC viewer - Remote Desktop to your phone, you can connect with user: pi. 
 <p align="center">
-  <img src="/imgs/vnc.png" height="400" />
+  <img src="https://github.com/miklos-szel/rpi-darts-kiosk/blob/gh-pages/imgs/vnc.png" height="400" />
 </p>
 
 

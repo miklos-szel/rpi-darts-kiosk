@@ -1,47 +1,215 @@
-## Welcome to GitHub Pages
+# What is this? 
 
-###  HW requirements:
-- Raspberry Pi model 3 or newer recommended
-- Microsoft Wireless Number Pad or a physical USB keyboard (latter works without out of the box) 
-- USB mouse to start the match, navigate stats (bluetooth mouse works as well)
-- Raspberry Pi Micro USB Cable with ON/Off Switch (optional, it can be any other Micro USB cable)
-- HDMI cable
-- A TV or monitor, the current setup doesn't support an external touchscreen as I don't have one
+A simple to setup remotely controlled darts scoring system using Raspberry Pi. 
 
+<p align="center">
+  <img src="/imgs/final.png" />
+</p>
 
+# Hardware requirements
+* Raspberry Pi model 3 or newer recommended
+* 4GB or bigger SD card 
+* HDMI to HDMI or HDMI to DVI cable (Raspberry 3)
+* TV or monitor
+* Scorekeeping:
+  * Bluetooth Numpad (Microsoft Wireless Number Pad) or
+  * 2.4ghz wireless keyboard(works out of the box) or
+  * Physical USB keyboard
+* Navigation (navigating menus,stats)
+  * Wireless bluetooth mouse or
+  * 2.4ghz wireless mouse (works out of the box) or
+  * Physical USB mouse
+* OPTIONAL: vnc (remote control software, can act as a mouse or keyboard)
 
-You can use the [editor on GitHub](https://github.com/miklos-szel/rpi-darts-scorer/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+# Install Raspberry Pi OS (bullseye)
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Download and install the [Raspberry Imager.](https://github.com/raspberrypi/rpi-imager/releases/tag/v1.6.2)
 
-### Markdown
+From the Operating System menu, choose: Raspberry OS Other -> **Raspberry Pi OS lite(32-BIT)**.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+Before writing the image use the Advanced options in the Raspberry Pi Imager to configure the network and enable ssh.
+Press [CTRL+SHIFT+X](https://youtu.be/om8gGB3gyT0?t=17) then make sure that 'enable ssh' and the 'Configure Wifi' sections are filled as seen below:
 
-```markdown
-Syntax highlighted code block
+<p align="center">
+  <img src="/imgs/rpi_imager_advanced_menu.png" height="800" />
+</p>
 
-# Header 1
-## Header 2
-### Header 3
+# Setup the system
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+Determine the ip address of the raspberry machine nmap:
+```
+nmap -sn 192.168.1.0/24
 ```
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+Log in with user pi:
 
-### Jekyll Themes
+`ssh pi@ip_of_the_rpi`
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/miklos-szel/rpi-darts-scorer/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+### Upgrade the system to the latest:
+``` 
+sudo apt-get update && sudo apt-get -y upgrade 
+```
+### Install the browser and its dependencies
+```
+sudo apt-get install -y  --no-install-recommends xserver-xorg x11-xserver-utils xinit openbox chromium 
+```
 
-### Support or Contact
+### Enable auto login with user pi
+```
+sudo raspi-config
+```
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+`1. System Options ->  S5 Boot / Auto Login ->  B2 Console Autologin`
+
+(you can defer the reboot for now)
+
+### Configure the browser to start in kiosk mode:
+
+change the `/etc/xdg/openbox/autostart` to the following:
+```
+URL1="https://app.kingofdarts.com/lets-play-darts"
+URL2="https://lidarts.org/game/create"
+URL3="http://www.pro-darter.com/dashboard.php"
+
+xset -dpms     # disable DPMS (Energy Star) features.
+xset s off     # disable screen saver
+xset s noblank # don't blank the video device
+
+unclutter &    # hide X mouse cursor unless mouse activated
+setxkbmap -option terminate:ctrl_alt_bksp
+
+
+/usr/bin/sed -i 's/"exited_cleanly":false/"exited_cleanly":true/' /home/pi/.config/chromium/'Local State'
+/usr/bin/sed -i 's/"exited_cleanly":false/"exited_cleanly":true/; s/"exit_type":"[^"]\+"/"exit_type":"Normal"/' /home/pi/.config/chromium/Default/Preferences
+
+
+chromium --display=:0 --alsa-output-device=hdmi_complete --kiosk --noerrdialogs --disable-translate --no-first-run --disable-infobars --disk-cache-dir=/dev/null  --password-store=basic --disable-pinch --overscroll-history-navigation=disabled  --check-for-update-interval=31536000 --force-device-scale-factor=1.9 --fast-start --fast --window-position=0,0 $URL1
+
+```
+
+`--force-device-scale-factor=1.9`  is based on my personal preferences and monitor size(4x3) you can change it here  or with CTRL+SHIFT + or - in the browser (or in vnc)
+
+Append the following to the `/home/pi/.bashrc` 
+```
+[[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx --
+```
+
+We should be good to go at this point! 
+
+
+### OPTIONAL: Install bluetooth keypad or mouse
+```
+sudo bluetoothctl
+agent on
+default-agent
+scan on
+
+scan off
+pair xx:xx:xx:xx:xx
+trust xx:xx:xx:xx:xx
+quit
+```
+The Microsoft Wireless Number Pad works perfectly for scorekeeping. 
+<p align="center">
+  <img src="/imgs/keypad.png" />
+</p>
+
+
+### OPTIONAL: Enable vnc server (remote control keyboard/mouse)
+
+```
+sudo apt-get install -y --no-install-recommends realvnc-vnc-server
+sudo systemctl enable vncserver-x11-serviced.service
+sudo systemctl start vncserver-x11-serviced.service 
+```
+
+Install VNC viewer - Remote Desktop to your phone, you can connect with user: pi. 
+<p align="center">
+  <img src="/imgs/vnc.png" height="400" />
+</p>
+
+
+
+### OPTIONAL: Make the boot screen less verbose
+`/boot/cmdline.txt`: add to the end of the first line `logo.nologo loglevel=0 consoleblank=1 silent quiet nosplash  vt.global_cursor_default=0`
+
+```
+touch /home/pi/.hushlogin
+```
+
+### OPTIONAL Add a nice splash screen
+```
+sudo apt-get install -y fbi
+```
+
+Download the logo for 16x9 screens:
+```
+sudo wget  https://github.com/miklos-szel/rpi-darts-kiosk/raw/gh-pages/imgs/king_of_darts.png -O /opt/splash.png
+```
+or for 4x3 screens:
+```
+sudo wget  https://github.com/miklos-szel/rpi-darts-kiosk/raw/gh-pages/imgs/king_of_darts_4_3.png -O /opt/splash.png
+```
+
+
+Create the following file
+```
+/etc/systemd/system/splashscreen.service
+```
+
+Add: 
+```
+[Unit]
+Description=Splash screen
+DefaultDependencies=no
+After=local-fs.target
+
+[Service]
+ExecStart=/usr/bin/fbi -d /dev/fb0 --noverbose -a /opt/splash.png
+StandardInput=tty
+StandardOutput=tty
+
+[Install]
+WantedBy=sysinit.target
+```
+
+Enable the service
+```
+sudo systemctl enable splashscreen.service
+```
+
+
+### OPTIONAL: Make the system read only, 
+I highly recommend to make all the changes you want before doing this. You might want to log in to homepage with your user first and optionally save the credentials in the chromium-browser so only a mouse will be needed later to start a match (slightly unsecure)
+Scoring can be completely done with the numberic keyboard.
+
+#### Disable the swap
+```
+sudo apt-get purge dphys-swapfile
+sudo apt-get autoremove
+```
+
+
+```
+sudo raspi-config
+```
+`4 Performance Options - >  P3 Overlay File System (enable)`
+
+Would you like the boot partition to be write-protected? **yes**
+
+
+The boot time for the system with overlay/bluetooth enabled is 53 secs. 
+
+#### OPTIONAL: smart socket to remotely turn the system on/off :)
+This could be done in different ways but using an [ikea smart socket](https://www.ikea.com/gb/en/p/tradfri-wireless-control-outlet-00364477/) is super convenient for me. Only turn the Raspberry Pi off this way if the read only file system is enabled.
+
+
+The system boots withing a minute with all the optional settings enabled. 
+
+Useful urls: 
+
+- https://itnext.io/raspberry-pi-read-only-kiosk-mode-the-complete-tutorial-for-2021-58a860474215
+- https://kingofdarts.com/
+- http://www.pro-darter.com/
+- https://lidarts.org/
+

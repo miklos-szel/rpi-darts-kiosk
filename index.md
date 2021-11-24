@@ -94,8 +94,7 @@ Append the following to the `/home/pi/.bashrc`
 [[ -z $DISPLAY && $XDG_VTNR -eq 1 ]] && startx --
 ```
 
-We should be good to go at this point! 
-
+The system is ready at this point! 
 
 ### OPTIONAL: Install bluetooth keypad or mouse
 ```
@@ -106,6 +105,7 @@ scan on
 
 scan off
 pair xx:xx:xx:xx:xx
+(enter the Passkey on the keyboard and press enter)
 trust xx:xx:xx:xx:xx
 quit
 ```
@@ -113,6 +113,8 @@ The Microsoft Wireless Number Pad works perfectly for scorekeeping.
 <p align="center">
   <img src="https://miklos-szel.github.io/rpi-darts-kiosk/imgs/keypad.png" />
 </p>
+
+Warning: The keyboard won't send any output to your ssh terminal. 
 
 
 ### OPTIONAL: Enable vnc server (remote control keyboard/mouse)
@@ -123,7 +125,7 @@ sudo systemctl enable vncserver-x11-serviced.service
 sudo systemctl start vncserver-x11-serviced.service 
 ```
 
-Install VNC viewer - Remote Desktop to your phone, you can connect with user: pi. 
+Install `VNC viewer - Remote Desktop` to your phone, you can connect with user: pi. 
 <p align="center">
   <img src="https://miklos-szel.github.io/rpi-darts-kiosk/imgs/vnc.png" height="400" />
 </p>
@@ -185,8 +187,8 @@ Scoring can be completely done with the numberic keyboard.
 
 #### Disable the swap
 ```
-sudo apt-get purge dphys-swapfile
-sudo apt-get autoremove
+sudo apt-get purge -y dphys-swapfile
+sudo apt-get autoremove -y 
 ```
 
 

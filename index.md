@@ -83,11 +83,15 @@ setxkbmap -option terminate:ctrl_alt_bksp
 /usr/bin/sed -i 's/"exited_cleanly":false/"exited_cleanly":true/; s/"exit_type":"[^"]\+"/"exit_type":"Normal"/' /home/pi/.config/chromium/Default/Preferences
 
 
-chromium --display=:0 --alsa-output-device=hdmi_complete --kiosk --noerrdialogs --disable-translate --no-first-run --disable-infobars --disk-cache-dir=/dev/null  --password-store=basic --disable-pinch --overscroll-history-navigation=disabled  --check-for-update-interval=31536000 --force-device-scale-factor=1.9 --fast-start --fast --window-position=0,0 $URL1
+
+chromium --display=:0 --kiosk --noerrdialogs --disable-translate --no-first-run --disable-infobars --disk-cache-dir=/dev/null  --password-store=basic --disable-pinch --overscroll-history-navigation=disabled  --check-for-update-interval=31536000 --force-device-scale-factor=1.9 --fast-start --fast --window-position=0,0 $URL1
 
 ```
 
 `--force-device-scale-factor=1.9`  is based on my personal preferences and monitor size(4x3) you can change it here  or with CTRL+SHIFT + or - in the browser (or in vnc)
+
+`--force-device-scale-factor=1.2` is recommended for 4x3 monitors when using Pro Darter.
+
 
 Append the following to the `/home/pi/.bashrc` 
 ```
